@@ -13,23 +13,15 @@ export const useShoppingCart = () => {
     count: number;
   }) => {
     setShoppingCard((prevShopping) => {
-      const productInCard: ProductInCardProps = prevShopping[product.id] || {
-        ...product,
-        count: 0,
-      };
-
-      if (Math.max(productInCard.count + count, 0) > 0) {
-        productInCard.count += count;
-
-        return {
-          ...prevShopping,
-          [product.id]: productInCard,
-        };
+      if (count === 0) {
+        const { [product.id]: toDelete, ...rest } = prevShopping;
+        return rest;
       }
 
-      const { [product.id]: toDelete, ...rest } = prevShopping;
-
-      return rest;
+      return {
+        ...prevShopping,
+        [product.id]: { ...product, count },
+      };
     });
   };
 
