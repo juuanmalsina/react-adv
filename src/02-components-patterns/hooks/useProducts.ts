@@ -1,33 +1,51 @@
-import { useEffect, useState } from "react";
-import { OnChangeArgs, ProductProps } from "../interfaces/interfaces";
+import { useEffect, useRef, useState } from "react";
+import {
+  InitialValues,
+  OnChangeArgs,
+  ProductProps,
+} from "../interfaces/interfaces";
 
 interface UseProductProps {
   product: ProductProps;
   onChange?: (args: OnChangeArgs) => void;
   value?: number;
+  initialValues: InitialValues;
 }
 
 export const useProduct = ({
   onChange,
   product,
   value = 0,
+  initialValues,
 }: UseProductProps) => {
-  const [counter, setCounter] = useState(value);
+  const [counter, setCounter] = useState<number>(initialValues?.count || value);
+
+  const isMmounted = useRef(false);
+
+  // console.log(initialValues?.count);
 
   const increaseBy = (value: number) => {
-    const newValue = Math.max(counter + value, 0);
+    let newValue = Math.max(counter + value, 0);
+    if (initialValues?.maxCount) {
+      newValue = Math.min(newValue, initialValues.maxCount);
+    }
     setCounter(newValue);
 
     onChange && onChange({ count: newValue, product });
   };
 
   useEffect(() => {
+    if (!isMmounted.current) return;
     setCounter(value);
   }, [value]);
+
+  useEffect(() => {
+    isMmounted.current = true;
+  }, []);
 
   return {
     counter,
     increaseBy,
-    value,
+    maxCount: initialValues?.maxCount,
   };
 };

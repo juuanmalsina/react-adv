@@ -4,8 +4,10 @@ import styles from "../styles/styles.module.css";
 import { ProducTitle } from "./ProducTitle";
 import { ProductImage } from "./ProductImage";
 import { ProductButtons } from "./ProductButtons";
-import { ProductCardProps, ProductContextProps } from "../interfaces/interfaces";
-
+import {
+  ProductCardProps,
+  ProductContextProps,
+} from "../interfaces/interfaces";
 
 export const ProductContext = createContext({} as ProductContextProps);
 const { Provider } = ProductContext;
@@ -16,19 +18,26 @@ export const ProductCard = ({
   className,
   style,
   onChange,
-  value
+  value,
+  initialValues,
 }: ProductCardProps) => {
-  const { counter, increaseBy } = useProduct({ onChange, product,value });
+  const { counter, increaseBy, maxCount } = useProduct({
+    onChange,
+    product,
+    value,
+    initialValues,
+  });
   return (
     <Provider
       value={{
         counter,
         increaseBy,
+        maxCount,
         product,
       }}
     >
       <div style={style} className={`${styles.productCard} ${className}`}>
-        {children}
+        {children("hola mundo")}
       </div>
     </Provider>
   );
