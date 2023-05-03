@@ -1,6 +1,6 @@
 export interface ProductCardProps {
   //children: React.ReactNode;
-  children: (msj: string) => JSX.Element;
+  children: (args: ProductCardHandlers) => JSX.Element;
   product: ProductProps;
   className?: string;
   style?: React.CSSProperties;
@@ -17,7 +17,7 @@ export interface ProductContextProps {
   counter: number;
   product: ProductProps;
   maxCount?: number;
-  
+
   increaseBy: (value: number) => void;
 }
 
@@ -33,4 +33,14 @@ export interface ProductInCardProps extends ProductProps {
 export interface InitialValues {
   count?: number;
   maxCount?: number;
+}
+
+export interface ProductCardHandlers {
+  count: number;
+  isMaxCountReached: boolean;
+  maxCount?: number;
+  product: ProductProps;
+
+  increaseBy: (value: number) => void;
+  reset: () => void;
 }
